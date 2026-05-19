@@ -10,6 +10,7 @@ type ATSType string
 const (
 	ATSGreenhouse ATSType = "greenhouse"
 	ATSLever      ATSType = "lever"
+	ATSWorkday    ATSType = "workday"
 )
 
 type Subscription struct {

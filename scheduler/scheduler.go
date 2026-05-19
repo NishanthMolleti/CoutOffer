@@ -17,6 +17,8 @@ func getScraper(atsType models.ATSType) scraper.Scraper {
 		return &scraper.GreenhouseScraper{}
 	case models.ATSLever:
 		return &scraper.LeverScraper{}
+	case models.ATSWorkday:
+		return &scraper.WorkdayScraper{}
 	default:
 		return nil
 	}

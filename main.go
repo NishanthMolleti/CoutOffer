@@ -19,7 +19,11 @@ import (
 func main() {
 	godotenv.Load()
 
-	db, err := gorm.Open(sqlite.Open("jobs.db"), &gorm.Config{
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "jobs.db"
+	}
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
