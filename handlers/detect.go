@@ -12,6 +12,70 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type atsEntry struct{ ATSType, ATSSlug string }
+
+var knownCompanies = map[string]atsEntry{
+	// Greenhouse
+	"anthropic":             {"greenhouse", "anthropic"},
+	"databricks":            {"greenhouse", "databricks"},
+	"jane street":           {"greenhouse", "janestreet"},
+	"cloudflare":            {"greenhouse", "cloudflare"},
+	"pure storage":          {"greenhouse", "purestorage"},
+	"cockroach labs":        {"greenhouse", "cockroachlabs"},
+	"stripe":                {"greenhouse", "stripe"},
+	"xai":                   {"greenhouse", "xai"},
+	"scale ai":              {"greenhouse", "scaleai"},
+	"together ai":           {"greenhouse", "togetherai"},
+	"canonical":             {"greenhouse", "canonical"},
+	"elastic":               {"greenhouse", "elastic"},
+	"mongodb":               {"greenhouse", "mongodb"},
+	"grafana labs":          {"greenhouse", "grafanalabs"},
+	"figma":                 {"greenhouse", "figma"},
+	"airbnb":                {"greenhouse", "airbnb"},
+	"dropbox":               {"greenhouse", "dropbox"},
+	"vercel":                {"greenhouse", "vercel"},
+	"rubrik":                {"greenhouse", "rubrik"},
+	// Lever
+	"netflix":               {"lever", "netflix"},
+	"palantir":              {"lever", "palantir"},
+	"mistral":               {"lever", "mistral"},
+	"mistral ai":            {"lever", "mistral"},
+	"atlassian":             {"lever", "atlassian"},
+	// Workday
+	"red hat":               {"workday", "redhat.wd5"},
+	"nvidia":                {"workday", "nvidia.wd5/NVIDIAExternalCareerSite"},
+	// Custom ATS — not on Greenhouse/Lever/Workday
+	"google":                {},
+	"meta":                  {},
+	"amazon":                {},
+	"amazon aws":            {},
+	"microsoft":             {},
+	"microsoft azure":       {},
+	"apple":                 {},
+	"uber":                  {},
+	"shopify":               {},
+	"openai":                {},
+	"snowflake":             {},
+	"amd":                   {},
+	"broadcom":              {},
+	"cisco":                 {},
+	"juniper networks":      {},
+	"dell technologies":     {},
+	"netapp":                {},
+	"oracle cloud infrastructure": {},
+	"vmware":                {},
+	"vmware by broadcom":    {},
+	"hashicorp":             {},
+	"docker":                {},
+	"redis":                 {},
+	"confluent":             {},
+	"cohere":                {},
+	"perplexity ai":         {},
+	"perplexity":            {},
+	"hudson river trading":  {},
+	"citadel securities":    {},
+}
+
 type detectResult struct {
 	ATSType string `json:"ats_type"`
 	ATSSlug string `json:"ats_slug"`
@@ -22,6 +86,16 @@ func (h *Handler) Detect(c *gin.Context) {
 	company := strings.TrimSpace(c.Query("company"))
 	if company == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "company required"})
+		return
+	}
+
+	// fast path: hardcoded lookup
+	if entry, ok := knownCompanies[strings.ToLower(company)]; ok {
+		if entry.ATSType == "" {
+			c.JSON(http.StatusOK, detectResult{Found: false})
+			return
+		}
+		c.JSON(http.StatusOK, detectResult{ATSType: entry.ATSType, ATSSlug: entry.ATSSlug, Found: true})
 		return
 	}
 

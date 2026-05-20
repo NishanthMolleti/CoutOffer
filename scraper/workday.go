@@ -27,11 +27,17 @@ type workdayResponse struct {
 	Total int `json:"total"`
 }
 
-// slug format: "{tenant}.wd{N}" e.g. "google.wd1"
+// slug format: "{tenant}.wd{N}" or "{tenant}.wd{N}/BoardName"
+// e.g. "redhat.wd5" or "nvidia.wd5/NVIDIAExternalCareerSite"
 func (w *WorkdayScraper) FetchJobs(slug string) ([]Job, error) {
+	board := "jobs"
+	if idx := strings.Index(slug, "/"); idx != -1 {
+		board = slug[idx+1:]
+		slug = slug[:idx]
+	}
 	parts := strings.SplitN(slug, ".", 2)
 	if len(parts) != 2 {
-		return nil, fmt.Errorf("workday slug must be '{tenant}.wd{N}', got %q", slug)
+		return nil, fmt.Errorf("workday slug must be '{tenant}.wd{N}[/Board]', got %q", slug)
 	}
 	tenant := parts[0]
 	instance := parts[1]
@@ -51,7 +57,7 @@ func (w *WorkdayScraper) FetchJobs(slug string) ([]Job, error) {
 			return nil, err
 		}
 
-		url := fmt.Sprintf("https://%s.%s.myworkdayjobs.com/wday/cxs/%s/jobs/jobs", tenant, instance, tenant)
+		url := fmt.Sprintf("https://%s.%s.myworkdayjobs.com/wday/cxs/%s/%s/jobs", tenant, instance, tenant, board)
 		req, err := http.NewRequest("POST", url, bytes.NewReader(body))
 		if err != nil {
 			return nil, err
@@ -74,7 +80,7 @@ func (w *WorkdayScraper) FetchJobs(slug string) ([]Job, error) {
 			return nil, err
 		}
 
-		baseURL := fmt.Sprintf("https://%s.%s.myworkdayjobs.com/en-US/jobs", tenant, instance)
+		baseURL := fmt.Sprintf("https://%s.%s.myworkdayjobs.com/en-US/%s", tenant, instance, board)
 		for _, j := range data.JobPostings {
 			all = append(all, Job{
 				ID:       j.ReqId,
