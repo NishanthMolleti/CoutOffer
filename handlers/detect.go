@@ -44,8 +44,9 @@ var knownCompanies = map[string]atsEntry{
 	// Workday
 	"red hat":               {"workday", "redhat.wd5"},
 	"nvidia":                {"workday", "nvidia.wd5/NVIDIAExternalCareerSite"},
+	// Google Careers
+	"google":                {"google", "Google"},
 	// Custom ATS — not on Greenhouse/Lever/Workday
-	"google":                {},
 	"meta":                  {},
 	"amazon":                {},
 	"amazon aws":            {},
