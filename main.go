@@ -44,6 +44,7 @@ func main() {
 
 	h := handlers.New(db)
 	r.GET("/", h.Index)
+	r.GET("/detect", h.Detect)
 	r.POST("/subscribe", h.Subscribe)
 	r.POST("/unsubscribe/:id", h.Unsubscribe)
 	r.POST("/check", h.ManualCheck)
