@@ -46,7 +46,18 @@ var knownCompanies = map[string]atsEntry{
 	"nvidia":                {"workday", "nvidia.wd5/NVIDIAExternalCareerSite"},
 	// Google Careers
 	"google":                {"google", "Google"},
-	// Custom ATS — not on Greenhouse/Lever/Workday
+	// Ashby
+	"openai":                {"ashby", "openai"},
+	"cohere":                {"ashby", "cohere"},
+	"perplexity":            {"ashby", "perplexity"},
+	"perplexity ai":         {"ashby", "perplexity"},
+	"confluent":             {"ashby", "confluent"},
+	"docker":                {"ashby", "docker"},
+	"redis":                 {"ashby", "redis"},
+	// Workday (with custom board names)
+	"broadcom":              {"workday", "broadcom.wd1/External_Career"},
+	"dell technologies":     {"workday", "dell.wd1/External"},
+	// Custom ATS — not yet supported
 	"meta":                  {},
 	"amazon":                {},
 	"amazon aws":            {},
@@ -55,24 +66,15 @@ var knownCompanies = map[string]atsEntry{
 	"apple":                 {},
 	"uber":                  {},
 	"shopify":               {},
-	"openai":                {},
 	"snowflake":             {},
 	"amd":                   {},
-	"broadcom":              {},
 	"cisco":                 {},
 	"juniper networks":      {},
-	"dell technologies":     {},
 	"netapp":                {},
 	"oracle cloud infrastructure": {},
 	"vmware":                {},
 	"vmware by broadcom":    {},
 	"hashicorp":             {},
-	"docker":                {},
-	"redis":                 {},
-	"confluent":             {},
-	"cohere":                {},
-	"perplexity ai":         {},
-	"perplexity":            {},
 	"hudson river trading":  {},
 	"citadel securities":    {},
 }
@@ -127,6 +129,14 @@ func (h *Handler) Detect(c *gin.Context) {
 			defer wg.Done()
 			if tryLever(slug) {
 				once.Do(func() { resultCh <- candidate{"lever", slug} })
+			}
+		}()
+
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if tryAshby(slug) {
+				once.Do(func() { resultCh <- candidate{"ashby", slug} })
 			}
 		}()
 
@@ -200,6 +210,15 @@ func tryLever(slug string) bool {
 		}
 	}
 	return true
+}
+
+func tryAshby(slug string) bool {
+	resp, err := http.Get(fmt.Sprintf("https://api.ashbyhq.com/posting-api/job-board/%s", slug))
+	if err != nil {
+		return false
+	}
+	resp.Body.Close()
+	return resp.StatusCode == http.StatusOK
 }
 
 func tryWorkday(tenant, instance string) bool {
