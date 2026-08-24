@@ -1,0 +1,77 @@
+name: Deploy to GCP VM
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package repo
+        run: git archive --format=tar.gz -o coutoffer-deploy.tar.gz HEAD
+
+      - name: Copy release to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.GCP_VM_HOST }}
+          username: ${{ secrets.GCP_VM_USER }}
+          key: ${{ secrets.GCP_VM_SSH_KEY }}
+          source: "coutoffer-deploy.tar.gz"
+          target: "~/"
+
+      - name: Build, swap, health-check (auto-rollback on failure)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_VM_HOST }}
+          username: ${{ secrets.GCP_VM_USER }}
+          key: ${{ secrets.GCP_VM_SSH_KEY }}
+          script: |
+            set -e
+            rm -rf ~/coutoffer-new
+            mkdir -p ~/coutoffer-new
+            tar xzf ~/coutoffer-deploy.tar.gz -C ~/coutoffer-new
+            cp ~/coutoffer/.env ~/coutoffer-new/.env
+            cd ~/coutoffer-new
+            docker build -t coutoffer:new .
+
+            docker tag coutoffer:latest coutoffer:previous || true
+            docker stop coutoffer
+            docker rm coutoffer
+            docker tag coutoffer:new coutoffer:latest
+            docker run -d --name coutoffer --restart always \
+              -p 8080:8080 \
+              --env-file .env \
+              -v /home/nishanthmolleti/data:/app/data \
+              coutoffer:latest
+
+            ok=false
+            for i in $(seq 1 10); do
+              sleep 2
+              if curl -sf -o /dev/null http://localhost:8080/; then
+                ok=true
+                break
+              fi
+            done
+
+            if [ "$ok" != "true" ]; then
+              echo "Health check failed after deploy — rolling back to previous image"
+              docker logs coutoffer --tail 50 || true
+              docker stop coutoffer || true
+              docker rm coutoffer || true
+              docker run -d --name coutoffer --restart always \
+                -p 8080:8080 \
+                --env-file ~/coutoffer/.env \
+                -v /home/nishanthmolleti/data:/app/data \
+                coutoffer:previous
+              rm -rf ~/coutoffer-new
+              rm -f ~/coutoffer-deploy.tar.gz
+              exit 1
+            fi
+
+            rm -rf ~/coutoffer-old
+            mv ~/coutoffer ~/coutoffer-old
+            mv ~/coutoffer-new ~/coutoffer
+            rm -f ~/coutoffer-deploy.tar.gz
