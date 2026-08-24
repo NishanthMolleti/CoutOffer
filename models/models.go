@@ -13,6 +13,7 @@ const (
 	ATSWorkday    ATSType = "workday"
 	ATSGoogle     ATSType = "google"
 	ATSAshby      ATSType = "ashby"
+	ATSApple      ATSType = "apple"
 )
 
 type Subscription struct {

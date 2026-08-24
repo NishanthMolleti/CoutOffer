@@ -57,13 +57,14 @@ var knownCompanies = map[string]atsEntry{
 	// Workday (with custom board names)
 	"broadcom":              {"workday", "broadcom.wd1/External_Career"},
 	"dell technologies":     {"workday", "dell.wd1/External"},
+	// Apple Careers (single site, no per-company slug)
+	"apple":                 {"apple", "apple"},
 	// Custom ATS — not yet supported
 	"meta":                  {},
 	"amazon":                {},
 	"amazon aws":            {},
 	"microsoft":             {},
 	"microsoft azure":       {},
-	"apple":                 {},
 	"uber":                  {},
 	"shopify":               {},
 	"snowflake":             {},

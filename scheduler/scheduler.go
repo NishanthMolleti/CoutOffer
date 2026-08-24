@@ -23,6 +23,8 @@ func getScraper(atsType models.ATSType) scraper.Scraper {
 		return &scraper.GoogleScraper{}
 	case models.ATSAshby:
 		return &scraper.AshbyScraper{}
+	case models.ATSApple:
+		return &scraper.AppleScraper{}
 	default:
 		return nil
 	}
