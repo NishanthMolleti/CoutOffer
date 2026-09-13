@@ -23,6 +23,7 @@ func (h *Handler) Index(c *gin.Context) {
 	h.db.Where("active = ?", true).Find(&subs)
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"subscriptions": subs,
+		"companies":     SupportedCompanies,
 	})
 }
 

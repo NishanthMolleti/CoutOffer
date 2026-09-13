@@ -80,6 +80,47 @@ var knownCompanies = map[string]atsEntry{
 	"citadel securities":    {},
 }
 
+// SupportedCompanies is the curated list of companies with a working ATS
+// mapping in knownCompanies (aliases collapsed to one canonical display name),
+// used to populate the company dropdown on the subscribe form.
+var SupportedCompanies = []string{
+	"Airbnb",
+	"Anthropic",
+	"Apple",
+	"Atlassian",
+	"Broadcom",
+	"Canonical",
+	"Cloudflare",
+	"Cockroach Labs",
+	"Cohere",
+	"Confluent",
+	"Databricks",
+	"Dell Technologies",
+	"Docker",
+	"Dropbox",
+	"Elastic",
+	"Figma",
+	"Google",
+	"Grafana Labs",
+	"Jane Street",
+	"MongoDB",
+	"Mistral AI",
+	"Netflix",
+	"Nvidia",
+	"OpenAI",
+	"Palantir",
+	"Perplexity",
+	"Pure Storage",
+	"Red Hat",
+	"Redis",
+	"Rubrik",
+	"Scale AI",
+	"Stripe",
+	"Together AI",
+	"Vercel",
+	"xAI",
+}
+
 type detectResult struct {
 	ATSType string `json:"ats_type"`
 	ATSSlug string `json:"ats_slug"`
