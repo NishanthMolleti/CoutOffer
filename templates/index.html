@@ -9,13 +9,13 @@
     body { font-family: 'Courier New', monospace; }
   </style>
 </head>
-<body class="bg-gray-950 text-green-400 min-h-screen p-8">
+<body class="bg-gray-950 text-[#39FF14]/90 min-h-screen p-8">
 
   <div class="max-w-3xl mx-auto">
 
     <div class="mb-10">
-      <h1 class="text-3xl font-bold text-green-300">cout &lt;&lt; offer;</h1>
-      <p class="text-green-600 text-sm mt-1">// job radar. no noise. only signal.</p>
+      <h1 class="text-3xl font-bold text-[#39FF14]">cout &lt;&lt; offer;</h1>
+      <p class="text-[#39FF14]/70 text-sm mt-1">// job radar. no noise. only signal.</p>
     </div>
 
     {{if .error}}
@@ -24,34 +24,34 @@
     </div>
     {{end}}
 
-    <div class="border border-green-800 rounded-lg p-6 mb-10 bg-gray-900">
-      <h2 class="text-green-300 font-bold mb-4 text-lg">// add watch</h2>
+    <div class="border border-[#39FF14]/40 rounded-lg p-6 mb-10 bg-gray-900">
+      <h2 class="text-[#39FF14] font-bold mb-4 text-lg">// add watch</h2>
       <form method="POST" action="/subscribe" class="space-y-4">
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-green-600 text-xs mb-1">email</label>
+            <label class="block text-[#39FF14]/70 text-xs mb-1">email</label>
             <input type="email" name="email" required placeholder="you@example.com"
-              class="w-full bg-gray-950 border border-green-800 rounded px-3 py-2 text-green-300 text-sm focus:outline-none focus:border-green-500 placeholder-green-900" />
+              class="w-full bg-gray-950 border border-[#39FF14]/40 rounded px-3 py-2 text-[#39FF14] text-sm focus:outline-none focus:border-[#39FF14]/80 placeholder-[#39FF14]/25" />
           </div>
           <div>
-            <label class="block text-green-600 text-xs mb-1">company name</label>
+            <label class="block text-[#39FF14]/70 text-xs mb-1">company name</label>
             <select name="company" id="company" required onchange="detectATS()"
-              class="w-full bg-gray-950 border border-green-800 rounded px-3 py-2 text-green-300 text-sm focus:outline-none focus:border-green-500">
+              class="w-full bg-gray-950 border border-[#39FF14]/40 rounded px-3 py-2 text-[#39FF14] text-sm focus:outline-none focus:border-[#39FF14]/80">
               <option value="" disabled selected>select company</option>
               {{range .companies}}
               <option value="{{ . }}">{{ . }}</option>
               {{end}}
             </select>
-            <p id="detect-status" class="text-xs mt-1 text-green-700"></p>
+            <p id="detect-status" class="text-xs mt-1 text-[#39FF14]/55"></p>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-green-600 text-xs mb-1">ATS platform</label>
+            <label class="block text-[#39FF14]/70 text-xs mb-1">ATS platform</label>
             <select name="ats_type"
-              class="w-full bg-gray-950 border border-green-800 rounded px-3 py-2 text-green-300 text-sm focus:outline-none focus:border-green-500">
+              class="w-full bg-gray-950 border border-[#39FF14]/40 rounded px-3 py-2 text-[#39FF14] text-sm focus:outline-none focus:border-[#39FF14]/80">
               <option value="greenhouse">Greenhouse</option>
               <option value="lever">Lever</option>
               <option value="workday">Workday</option>
@@ -61,22 +61,22 @@
             </select>
           </div>
           <div>
-            <label class="block text-green-600 text-xs mb-1">ATS slug</label>
+            <label class="block text-[#39FF14]/70 text-xs mb-1">ATS slug</label>
             <input type="text" name="ats_slug" required placeholder="anthropic"
-              class="w-full bg-gray-950 border border-green-800 rounded px-3 py-2 text-green-300 text-sm focus:outline-none focus:border-green-500 placeholder-green-900" />
-            <p class="text-green-800 text-xs mt-1">greenhouse.io/<span class="text-green-600">slug</span>/jobs</p>
+              class="w-full bg-gray-950 border border-[#39FF14]/40 rounded px-3 py-2 text-[#39FF14] text-sm focus:outline-none focus:border-[#39FF14]/80 placeholder-[#39FF14]/25" />
+            <p class="text-[#39FF14]/40 text-xs mt-1">greenhouse.io/<span class="text-[#39FF14]/70">slug</span>/jobs</p>
           </div>
         </div>
 
         <div>
-          <label class="block text-green-600 text-xs mb-1">role keywords <span class="text-green-800">(comma-separated, empty = all)</span></label>
+          <label class="block text-[#39FF14]/70 text-xs mb-1">role keywords <span class="text-[#39FF14]/40">(comma-separated, empty = all)</span></label>
           <input type="text" name="roles" placeholder="Software Engineer, Backend, Go"
-            class="w-full bg-gray-950 border border-green-800 rounded px-3 py-2 text-green-300 text-sm focus:outline-none focus:border-green-500 placeholder-green-900" />
+            class="w-full bg-gray-950 border border-[#39FF14]/40 rounded px-3 py-2 text-[#39FF14] text-sm focus:outline-none focus:border-[#39FF14]/80 placeholder-[#39FF14]/25" />
         </div>
 
         <div class="flex gap-3 pt-2">
           <button type="submit"
-            class="bg-green-800 hover:bg-green-700 text-green-100 px-5 py-2 rounded text-sm font-bold transition-colors">
+            class="bg-[#39FF14]/40 hover:bg-[#39FF14]/55 text-[#39FF14] px-5 py-2 rounded text-sm font-bold transition-colors">
             + watch
           </button>
         </div>
@@ -84,10 +84,10 @@
     </div>
 
     <div class="mb-6 flex items-center justify-between">
-      <h2 class="text-green-300 font-bold text-lg">// active watches</h2>
+      <h2 class="text-[#39FF14] font-bold text-lg">// active watches</h2>
       <form method="POST" action="/check">
         <button type="submit"
-          class="border border-green-700 hover:border-green-500 text-green-500 hover:text-green-300 px-4 py-1 rounded text-xs transition-colors">
+          class="border border-[#39FF14]/55 hover:border-[#39FF14]/80 text-[#39FF14]/80 hover:text-[#39FF14] px-4 py-1 rounded text-xs transition-colors">
           ▶ check now
         </button>
       </form>
@@ -96,19 +96,19 @@
     {{if .subscriptions}}
     <div class="space-y-3">
       {{range .subscriptions}}
-      <div class="border border-green-900 rounded-lg px-5 py-4 bg-gray-900 flex items-start justify-between">
+      <div class="border border-[#39FF14]/25 rounded-lg px-5 py-4 bg-gray-900 flex items-start justify-between">
         <div>
-          <div class="text-green-300 font-bold">{{ .Company }}</div>
-          <div class="text-green-600 text-xs mt-1">
-            <span class="text-green-700">ats:</span> {{ .ATSType }} /
-            <span class="text-green-700">slug:</span> {{ .ATSSlug }}
+          <div class="text-[#39FF14] font-bold">{{ .Company }}</div>
+          <div class="text-[#39FF14]/70 text-xs mt-1">
+            <span class="text-[#39FF14]/55">ats:</span> {{ .ATSType }} /
+            <span class="text-[#39FF14]/55">slug:</span> {{ .ATSSlug }}
           </div>
           {{if .Roles}}
-          <div class="text-green-700 text-xs mt-1">
-            <span class="text-green-800">roles:</span> {{ .Roles }}
+          <div class="text-[#39FF14]/55 text-xs mt-1">
+            <span class="text-[#39FF14]/40">roles:</span> {{ .Roles }}
           </div>
           {{end}}
-          <div class="text-green-800 text-xs mt-1">→ {{ .Email }}</div>
+          <div class="text-[#39FF14]/40 text-xs mt-1">→ {{ .Email }}</div>
         </div>
         <form method="POST" action="/unsubscribe/{{ .ID }}">
           <button type="submit"
@@ -120,12 +120,12 @@
       {{end}}
     </div>
     {{else}}
-    <div class="border border-green-900 rounded-lg px-5 py-6 bg-gray-900 text-center text-green-800 text-sm">
+    <div class="border border-[#39FF14]/25 rounded-lg px-5 py-6 bg-gray-900 text-center text-[#39FF14]/40 text-sm">
       no watches yet. add one above.
     </div>
     {{end}}
 
-    <div class="mt-10 text-green-900 text-xs text-center">
+    <div class="mt-10 text-[#39FF14]/25 text-xs text-center">
       checks run every hour via cron // cout &lt;&lt; offer;
     </div>
 
@@ -137,7 +137,7 @@ async function detectATS() {
   if (!company) return
 
   status.textContent = '// detecting...'
-  status.className = 'text-xs mt-1 text-green-700'
+  status.className = 'text-xs mt-1 text-[#39FF14]/55'
 
   try {
     const res = await fetch('/detect?company=' + encodeURIComponent(company))
@@ -147,7 +147,7 @@ async function detectATS() {
       document.querySelector('select[name="ats_type"]').value = data.ats_type
       document.querySelector('input[name="ats_slug"]').value = data.ats_slug
       status.textContent = '✓ detected: ' + data.ats_type + ' (' + data.ats_slug + ')'
-      status.className = 'text-xs mt-1 text-green-500'
+      status.className = 'text-xs mt-1 text-[#39FF14]/80'
     } else {
       status.textContent = '✗ detection failed — try again'
       status.className = 'text-xs mt-1 text-red-600'
