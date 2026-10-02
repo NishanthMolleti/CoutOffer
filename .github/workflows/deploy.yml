@@ -1,4 +1,4 @@
-name: Deploy to GCP VM
+name: Deploy to Azure VM
 
 on:
   push:
@@ -16,18 +16,18 @@ jobs:
       - name: Copy release to VM
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.GCP_VM_HOST }}
-          username: ${{ secrets.GCP_VM_USER }}
-          key: ${{ secrets.GCP_VM_SSH_KEY }}
+          host: ${{ secrets.AZURE_VM_HOST }}
+          username: ${{ secrets.AZURE_VM_USER }}
+          key: ${{ secrets.AZURE_VM_SSH_KEY }}
           source: "coutoffer-deploy.tar.gz"
           target: "~/"
 
       - name: Build, swap, health-check (auto-rollback on failure)
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.GCP_VM_HOST }}
-          username: ${{ secrets.GCP_VM_USER }}
-          key: ${{ secrets.GCP_VM_SSH_KEY }}
+          host: ${{ secrets.AZURE_VM_HOST }}
+          username: ${{ secrets.AZURE_VM_USER }}
+          key: ${{ secrets.AZURE_VM_SSH_KEY }}
           script: |
             set -e
             rm -rf ~/coutoffer-new
@@ -44,7 +44,7 @@ jobs:
             docker run -d --name coutoffer --restart always \
               -p 8080:8080 \
               --env-file .env \
-              -v /home/nishanthmolleti/data:/app/data \
+              -v ~/data:/app/data \
               coutoffer:latest
 
             ok=false
@@ -64,7 +64,7 @@ jobs:
               docker run -d --name coutoffer --restart always \
                 -p 8080:8080 \
                 --env-file ~/coutoffer/.env \
-                -v /home/nishanthmolleti/data:/app/data \
+                -v ~/data:/app/data \
                 coutoffer:previous
               rm -rf ~/coutoffer-new
               rm -f ~/coutoffer-deploy.tar.gz
